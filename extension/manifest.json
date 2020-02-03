@@ -1,7 +1,7 @@
 {
-    "name": "Random Background Color",
+    "name": "CodeBreakers LeetCode",
     "version": "1.0",
-    "description": "building my first extension!",
+    "description": "Hints and Solutions for CodeBreakers students practicing LeetCode",
     "permissions": [
         "declarativeContent",
         "storage",
@@ -27,18 +27,18 @@
     "browser_action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "16": "images/get_started16.png",
-            "32": "images/get_started32.png",
-            "48": "images/get_started48.png",
-            "128": "images/get_started128.png"
+            "16": "images/cblogo.png",
+            "32": "images/cblogo.png",
+            "48": "images/cblogo.png",
+            "128": "images/cblogo.png"
           }
     },
 
     "icons": {
-        "16": "images/get_started16.png",
-        "32": "images/get_started32.png",
-        "48": "images/get_started48.png",
-        "128": "images/get_started128.png"
+        "16": "images/cblogo.png",
+        "32": "images/cblogo.png",
+        "48": "images/cblogo.png",
+        "128": "images/cblogo.png"
     },
     "manifest_version": 2
 }
