@@ -10,7 +10,7 @@ setTimeout(() => {
     let titleBar = problemName.parentElement;
     let div = document.createElement('div')
     div.innerHTML = `
-    <div class="badge badge-primary mt-2" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    <div class="badge badge-info mt-2" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     CodeBreakers Hints
     </div>
     <div class="collapse" id="collapseExample">
