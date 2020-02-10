@@ -3,7 +3,7 @@
     margin-left: -1.5rem !important;
 }
 
-.card-header {
+.card-header, .badge {
     cursor: pointer !important;
 }
 
