@@ -2,14 +2,7 @@
     "name": "CodeBreakers LeetCode",
     "version": "1.0",
     "description": "Hints and Solutions for CodeBreakers students practicing LeetCode",
-    "permissions": [
-        "declarativeContent",
-        "storage",
-        "activeTab",
-        "tabs",
-        "webNavigation",
-        "contextMenus"
-    ],
+    "permissions": [],
 
     "background": {
         "scripts": ["background.js"],
@@ -18,8 +11,9 @@
 
     "content_scripts": [
         {
-            "matches": ["https://leetcode.com/problems/*"],
-            "js": ["contentScript.js"]
+            "matches": ["https://leetcode.com/problems/*/"],
+            "js": ["jquery-3.4.1.js", "bootstrap-4.4.1-dist/js/bootstrap.bundle.js", "contentScript.js"],
+            "css": ["bootstrap-4.4.1-dist/css/bootstrap.css", "contentScript.css"]
 
         }
     ],
