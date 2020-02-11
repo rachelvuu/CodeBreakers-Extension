@@ -1,21 +1,21 @@
 .hint {
-    margin: -.75rem !important;
-    margin-left: -1.5rem !important;
+    margin: -.75rem ;
+    margin-left: -1.5rem ;
 }
 
 .card-header, .badge {
-    cursor: pointer !important;
+    cursor: pointer ;
 }
 
 .btn {
-    color: rgb(67, 160, 71) !important;
-    font-size: 85% !important;
+    color: rgb(67, 160, 71) ;
+    font-size: 85% ;
 }
 
 .badge {
-    font-size: 1rem !important; 
+    font-size: 1rem ; 
 }
 
 .card {
-    border-style: none !important;
+    border-style: none ;
 }
