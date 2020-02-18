@@ -1,14 +1,14 @@
 // temporary timeout. find better way to dynamically look for element
 setTimeout(() => {
     let problemName = document.querySelector('div[data-cy="question-title"]');
-    if (!problemName){
+    if (!problemName) {
         setTimeout(() => {
             problemName = document.querySelector('div[data-cy="question-title"]');
         }, 1000);
     }
-    chrome.runtime.sendMessage({problemName: problemName.innerHTML});
+    chrome.runtime.sendMessage({ problemName: problemName.innerHTML });
     let titleBar = problemName.parentElement;
-    let div = document.createElement('div')
+    let div = document.createElement("div");
     div.innerHTML = `
     <div class="badge badge-info mt-2" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     CodeBreakers Hints
@@ -59,8 +59,6 @@ setTimeout(() => {
             </div>
         </div>
     </div>
-    `
-    titleBar.append(div)
-}, 1000); 
-
-
+    `;
+    titleBar.append(div);
+}, 1000);
