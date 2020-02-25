@@ -1,10 +1,11 @@
 // temporary timeout. find better way to dynamically look for element
 setTimeout(() => {
+    // request();
     let problemName = document.querySelector('div[data-cy="question-title"]');
     if (!problemName) {
         setTimeout(() => {
             problemName = document.querySelector('div[data-cy="question-title"]');
-        }, 1000);
+        }, 500);
     }
     chrome.runtime.sendMessage({ problemName: problemName.innerHTML });
     let titleBar = problemName.parentElement;
@@ -55,10 +56,30 @@ setTimeout(() => {
                         </div>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingFour" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        <h5 class="hint">
+                            <div class='btn collapsed'>Solution</div>
+                        </h5>
+                    </div>
+                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                        <div class="card-body">
+                            <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
             
             </div>
         </div>
     </div>
     `;
     titleBar.append(div);
-}, 1000);
+}, 500);
+
+
+const request = async () => {
+    const response = await fetch('https://spreadsheets.google.com/feeds/cells/1tnGJ2eI1SkpJJMcmYfnjsW-yeGcQaf251eJgiJLC6Qo/1/public/full?alt=json');
+    const json = await response.json();
+    console.log(json.feed.entry);
+}
