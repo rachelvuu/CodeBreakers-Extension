@@ -8,12 +8,20 @@
 }
 
 .btn {
-    color: rgb(67, 160, 71) ;
     font-size: 85% ;
+}
+
+.hint:hover > .btn {
+    text-decoration: underline;
+    font-size: 90% ;
 }
 
 .badge {
     font-size: 1rem ; 
+}
+
+.badge:hover {
+    font-size: 1.1rem ; 
 }
 
 .card {

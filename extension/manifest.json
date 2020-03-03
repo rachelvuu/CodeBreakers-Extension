@@ -2,7 +2,7 @@
     "name": "CodeBreakers LeetCode",
     "version": "1.0",
     "description": "Hints and Solutions for CodeBreakers students practicing LeetCode",
-    "permissions": [],
+    "permissions": ["https://leetcode.com/*"],
 
     "background": {
         "scripts": ["background.js"],
@@ -15,6 +15,7 @@
             "js": [
                 "libs/jquery-3.4.1.js",
                 "libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js",
+                "config.js",
                 "contentScript.js"
             ],
             "css": ["libs/bootstrap-4.4.1-dist/css/bootstrap.min.css", "contentScript.css"]
