@@ -18,7 +18,7 @@ function main() {
             let problemNameText = problemName.textContent.split('.')[1].substring(1)
             let problemData = {}
             for (let row of value) {
-                if (row[0] == problemNameText) {
+                if (row[0].toLowerCase() == problemNameText.toLowerCase()) {
                     problemData['H1'] = row[1]
                     problemData['H2'] = row[2]
                     problemData['TS'] = row[3]
@@ -26,7 +26,8 @@ function main() {
                     problemData['CS'] = row[5]
                 }
             }
-            let videoID = problemData.VL.split('=')[1]
+            let videoID = ''
+            if (problemData.VL) videoID = problemData.VL.split('=')[1]
             let titleBar = problemName.parentElement;
             let div = document.createElement("div");
             div.innerHTML = `
