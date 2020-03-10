@@ -26,6 +26,7 @@ function main() {
                     problemData['CS'] = row[5]
                 }
             }
+            let videoID = problemData.VL.split('=')[1]
             let titleBar = problemName.parentElement;
             let div = document.createElement("div");
             div.innerHTML = `
@@ -83,8 +84,7 @@ function main() {
                             </div>
                             <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
                                 <div class="card-body">
-                                    <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                    ${problemData.VL}
+                                    <iframe src="https://www.youtube.com/embed/${videoID}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 </div>
                             </div>
                         </div>
