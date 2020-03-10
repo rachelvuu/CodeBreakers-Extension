@@ -1,5 +1,5 @@
 async function request() {
-    const response = await fetch(REQUEST);
+    const response = await fetch("https://sheets.googleapis.com/v4/spreadsheets/1tnGJ2eI1SkpJJMcmYfnjsW-yeGcQaf251eJgiJLC6Qo/values/Sheet1?key=AIzaSyCjjXAOcyX1Q-RzzXwg3h5-sM_JaiBDk68");
     const json = await response.json();
     return json.values;
 }
@@ -10,6 +10,11 @@ function main() {
     request().then((value) => {
         setTimeout(() => {
             let problemName = document.querySelector('div[data-cy="question-title"]');
+            if (!problemName) {
+                setTimeout(() => {
+                    problemName = document.querySelector('div[data-cy="question-title"]');
+                }, 1000);
+            }
             let problemNameText = problemName.textContent.split('.')[1].substring(1)
             let problemData = {}
             for (let row of value) {
@@ -106,6 +111,6 @@ ${problemData.CS}
             </div>
             `;
             titleBar.append(div);
-        }, 100);
+        }, 1000);
     })
 }
