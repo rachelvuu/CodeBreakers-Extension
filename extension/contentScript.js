@@ -34,23 +34,25 @@ function main() {
             <div class="badge badge-info mt-2" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
             CodeBreakers Hints
             </div>
+            
             <div class="collapse" id="collapseExample">
-            <div class='mt-1'>
-            <div id="accordion">
-            <div class="card">
-            <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <div class='mt-1'>
+                    <div id="accordion">
+            
+                        <div class="card">
+                            <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                 <h5 class="hint">
-                                    <div class='btn collapsed'>Hint 1</div>
-                                </h5>
+                                        <div class='btn collapsed'>Hint 1</div>
+                                    </h5>
                             </div>
-                        
+                                    
                             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                                 <div class="card-body">
                                 ${problemData.H1}
                                 </div>
                             </div>
                         </div>
-    
+            
                         <div class="card">
                             <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 <h5 class="hint">
@@ -63,7 +65,7 @@ function main() {
                                 </div>
                             </div>
                         </div>
-    
+            
                         <div class="card">
                             <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                 <h5 class="hint">
@@ -76,7 +78,7 @@ function main() {
                                 </div>
                             </div>
                         </div>
-    
+            
                         <div class="card">
                             <div class="card-header" id="headingFour" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                 <h5 class="hint">
@@ -89,24 +91,37 @@ function main() {
                                 </div>
                             </div>
                         </div>
-    
+            
                         <div class="card">
-                        <div class="card-header" id="headingFive" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                            <h5 class="hint">
-                                <div class='btn collapsed'>Code Solution</div>
-                            </h5>
-                        </div>
-                        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
-                            <div class="card-body">
-                                <code id='code-solution'>
-                                <pre>
+                            <div class="card-header" id="headingFive" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                <h5 class="hint">
+                                    <div class='btn collapsed'>Code Solution</div>
+                                </h5>
+                            </div>
+                            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                                <div class="card-body">
+                                    <code id='code-solution'>
+                                    <pre>
 ${problemData.CS}
-                                </pre>
-                                </code>
+                                    </pre>
+                                    </code>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
+
+                        <div class="card">
+                            <div class="card-header" id="headingSix" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                <h5 class="hint">
+                                    <div class='btn collapsed'>Feedback</div>
+                                </h5>
+                            </div>
+                            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+                                <div class="card-body">
+                                    <a target='_blank' href='https://docs.google.com/forms/d/e/1FAIpQLSfJAcC7WSbjycRLkuYrEgn1HPHhysTCBTUR4GXAOV-6ZJMxeg/viewform?entry.1655678686=${problemNameText}' type="button" class="btn btn-success btn-large">Have any suggestions or feedback for this problem? Fill out this survey!</a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
