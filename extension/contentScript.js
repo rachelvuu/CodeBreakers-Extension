@@ -117,7 +117,7 @@ ${problemData.CS}
                             </div>
                             <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
                                 <div class="card-body">
-                                    <a target='_blank' href='https://docs.google.com/forms/d/e/1FAIpQLSfJAcC7WSbjycRLkuYrEgn1HPHhysTCBTUR4GXAOV-6ZJMxeg/viewform?entry.1655678686=${problemNameText}' type="button" class="btn btn-success btn-large">Have any suggestions or feedback for this problem? Fill out this survey!</a>
+                                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfJAcC7WSbjycRLkuYrEgn1HPHhysTCBTUR4GXAOV-6ZJMxeg/viewform?embedded=true&entry.1655678686=${problemNameText}" width="400" height="100" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
                                 </div>
                             </div>
                         </div>
