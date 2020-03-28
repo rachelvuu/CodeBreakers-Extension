@@ -13,13 +13,6 @@ function changeWindow() {
 async function main() {
     // make request to spreadsheet
     let spreadsheet = await request();
-    let head = document.querySelector('head');
-    let link = document.createElement('script');
-    // pretty code
-    setTimeout(() => {
-        link.setAttribute('src', "https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=desert")
-        head.insertBefore(link, head.firstChild);
-    }, 1000)
     // find problem title
     let problemName = document.querySelector('div[data-cy="question-title"]');
     let problemNameText = problemName.textContent.split('.')[1].substring(1)
@@ -131,5 +124,7 @@ ${data.substring(data.indexOf("class Solution:")).trim()}
         </div>
     </div>
     `;
+    // pretty code
+    document.head.appendChild(document.createElement('script')).src = 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=desert'
     titleBar.append(div);
 }

@@ -2,7 +2,7 @@
     "name": "CodeBreakers LeetCode",
     "version": "1.0",
     "description": "Hints and Solutions for CodeBreakers students practicing LeetCode",
-    "permissions": ["https://leetcode.com/*"],
+    "permissions": ["https://leetcode.com/*", "activeTab"],
 
     "background": {
         "scripts": ["background.js"],
@@ -13,14 +13,12 @@
         {
             "matches": ["https://leetcode.com/problems/*/"],
             "js": [
-                "libs/google-code-prettify/prettify.js",
-                "libs/google-code-prettify/run_prettify.js",
                 "libs/jquery-3.4.1.js",
                 "libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js",
+                "libs/showdownjs-showdown-3c120ed/dist/showdown.min.js",
                 "contentScript.js"
             ],
             "css": [
-                "libs/google-code-prettify/prettify.css",
                 "libs/bootstrap-4.4.1-dist/css/bootstrap.min.css",
                 "contentScript.css"
             ]
