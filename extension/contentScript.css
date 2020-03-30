@@ -36,3 +36,7 @@ iframe {
 .prettyprint {
     font-size: .9em;
 }
+
+#expandCode {
+    padding: -2em;
+}

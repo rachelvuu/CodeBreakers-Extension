@@ -1,13 +1,26 @@
+// for changeWindow
+const width  = window.innerWidth;
+let expandedWindow = false;
+
+// content script loads faster than rest of content, so we must wait for the page to load first.
+setTimeout(main, 1000);
+
 async function request() {
     const response = await fetch("https://sheets.googleapis.com/v4/spreadsheets/1tnGJ2eI1SkpJJMcmYfnjsW-yeGcQaf251eJgiJLC6Qo/values/Sheet1?key=AIzaSyCjjXAOcyX1Q-RzzXwg3h5-sM_JaiBDk68");
     const json = await response.json();
     return json.values;
 }
-main();
 
 function changeWindow() {
     let windowSlider = document.querySelector('div[class="side-tools-wrapper__1TS9"]');
-    windowSlider.setAttribute('style', 'overflow: hidden; flex: 0 1 900px');
+    // expands to 2/3 width
+    if (!expandedWindow) {
+        windowSlider.setAttribute('style', `overflow: hidden; flex: 0 1 ${Math.ceil(width * 2/3)}px`);
+    // contracts to 1/2 width
+    } else { 
+        windowSlider.setAttribute('style', `overflow: hidden; flex: 0 1 ${Math.ceil(width * 1/2)}px`);
+    }
+    expandedWindow = !expandedWindow;
 }
 
 async function main() {
@@ -55,23 +68,28 @@ async function main() {
             `
         } else if (key.includes("Code")) {
             let response = await fetch(problemData[key]);
-            let data = await response.text()  
-                currentHint = `
-                    <div class="card">
-                        <div class="card-header" id="heading${i}" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="false" aria-controls="collapse${i}">
-                            <h5 class="hint">
-                                <div class='btn collapsed'>${key}</div>
-                            </h5>
-                        </div>
-                        <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordion">
-                            <div class="card-body">
-                                <pre class=prettyprint>
+            if (response.status == 200) {
+                let data = await response.text()  
+                    currentHint = `
+                        <div class="card">
+                            <div class="card-header" id="heading${i}" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="false" aria-controls="collapse${i}">
+                                <h5 class="hint">
+                                    <div class='btn collapsed'>${key}</div>
+                                </h5>
+                            </div>
+                            <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordion">
+                                <div class="card-body">
+                                    <button id="expandCode" type="button" class="btn btn-info mb-2 btn-block btn-lg">Expand Code Solution</button>
+                                    <pre class=prettyprint>
 ${data.substring(data.indexOf("class Solution:")).trim()}
-                                </pre>
+                                    </pre>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `
+                    `
+            } else {
+                currentHint = '';
+            }
         } else {
             currentHint = `
                 <div class="card">
@@ -127,4 +145,7 @@ ${data.substring(data.indexOf("class Solution:")).trim()}
     // pretty code
     document.head.appendChild(document.createElement('script')).src = 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=desert'
     titleBar.append(div);
+
+    let expandCodeButton = document.querySelector('#expandCode');
+    expandCodeButton.addEventListener('click', changeWindow);
 }
