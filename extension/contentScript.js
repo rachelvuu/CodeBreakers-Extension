@@ -1,7 +1,6 @@
 // for changeWindow
 const width  = window.innerWidth;
 let expandedWindow = false;
-console.log(innerWidth);
 
 // content script loads faster than rest of content, so we must wait for the page to load first.
 setTimeout(main, 1000);
@@ -17,7 +16,7 @@ function changeWindow() {
     // expands to 3/5 width
     if (!expandedWindow) {
         windowSlider.setAttribute('style', `overflow: hidden; flex: 0 1 ${Math.ceil(width * 3/5)}px`);
-    // contracts to 1/2 width
+    // contracts to 4.5/10 width
     } else { 
         windowSlider.setAttribute('style', `overflow: hidden; flex: 0 1 ${Math.ceil(width * 45/100)}px`);
     }
@@ -33,7 +32,14 @@ async function insertCardBody(problemData, hint) {
     if (hint.includes('Hint')) {
         htmlOfHintType = problemData[hint];
     } else if (hint.includes('Text')) {
-        htmlOfHintType = problemData[hint];
+        let response = await fetch(problemData[hint]);
+        if (response.status == 200) {
+            let converter = new showdown.Converter()
+            let textmd = await response.text();
+            textmd = textmd.substring(textmd.indexOf('# Motivation'))
+            let textHTML = converter.makeHtml(textmd)
+            htmlOfHintType = textHTML;
+        }
     } else if (hint.includes('Video')) {
         htmlOfHintType = `
             <iframe src="https://www.youtube.com/embed/${problemData[hint].split('=')[1]}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -70,6 +76,8 @@ ${htmlOfHintType}
     return cardBodyTemplate;
 }
 
+
+// main function
 async function main() {
     // Make request to spreadsheet
     let spreadsheet = await requestToSpreadSheet();
