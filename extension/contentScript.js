@@ -1,26 +1,26 @@
-// for changeWindow
+// for changeWindow function
 const width  = window.innerWidth;
 let expandedWindow = false;
 
-// content script loads faster than rest of content, so we must wait for the page to load first.
+// Content script loads faster than rest of content, so we must wait for the page to load first.
 setTimeout(main, 1000);
 
-// main function
+// Main function
 async function main() {
     // Make request to spreadsheet
     let spreadsheet = await requestToSpreadSheet();
-    // find problem title
+    // Find problem title
     let problemNameElem = document.querySelector('div[data-cy="question-title"]');
     let problemNameText = problemNameElem.textContent.split('.')[1].substring(1)
     let problemRow;
-    // match spreadsheet request data to problem title
+    // Match spreadsheet request data to problem title
     for (let row of spreadsheet) {
         if (row[0].toLowerCase() == problemNameText.toLowerCase()) {
             problemRow = row
             break;
         }
     }
-    // assign spreadsheet data to hash
+    // Assign spreadsheet data to map
     let problemData = {};
     problemData['Hint 1'] = problemRow[1];
     problemData['Hint 2'] = problemRow[2];
@@ -28,8 +28,9 @@ async function main() {
     problemData['Video Solution'] = problemRow[4];
     problemData['Code Solution'] = problemRow[5];
     
+    // Replace the pure data from spreadsheet to the actual HTML
     for (let hint in problemData) {
-        problemData[hint] = await insertCardBody(problemNameText, problemData, hint);
+        problemData[hint] = await replaceSpreadsheetDataWithHTML(problemNameText, problemData, hint);
     }
 
     let titleBar = problemNameElem.parentElement;
@@ -80,7 +81,7 @@ async function requestToSpreadSheet() {
 
 // Replaces the value of entry problemData entry to the actual HTML that will be injected.
 // Check problemData object structure for clarity.
-async function insertCardBody(problemNameText, problemData, hint) {
+async function replaceSpreadsheetDataWithHTML(problemNameText, problemData, hint) {
     let htmlOfHintType;
 
     // Different hint types require different HTML
@@ -111,6 +112,7 @@ ${htmlOfHintType}
     return cardBodyTemplate;
 };
 
+// If the dropdown is a hint or video, insert appropriate iframe, if empty insert appropriate google survey
 function handleHintOrVideo(problemNameText, problemData, hint) {
     let htmlOfHintType;
     if (hint.includes('Hint')) {
@@ -129,6 +131,7 @@ function handleHintOrVideo(problemNameText, problemData, hint) {
     return htmlOfHintType;
 };
 
+// If the dropdown is text or code, make fetch request to url, format, and insert appropriate html, if empty insert appropriate google survey
 async function handleTextOrCode(problemNameText, problemData, hint) {
     let htmlOfHintType;
     if (hint.includes('Text')) {
@@ -159,6 +162,7 @@ ${code.substring(code.indexOf("class Solution:")).trim()}
     return htmlOfHintType;
 }
 
+// Listener for expand button in the code section
 function changeWindow() {
     let windowSlider = document.querySelector('div[class="side-tools-wrapper__1TS9"]');
     // expands to 3/5 width
