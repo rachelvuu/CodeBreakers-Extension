@@ -11,7 +11,33 @@ async function main() {
     let spreadsheet = await requestToSpreadSheet();
     // Find problem title
     let problemNameElem = document.querySelector('div[data-cy="question-title"]');
-    let problemNameText = problemNameElem.textContent.split('.')[1].substring(1)
+    let problemNameText = problemNameElem.textContent.split('.')[1].substring(1);
+    // problemData is a map with keys as hint type and values as it's spreadsheet data
+    let problemData = fillMapWithSpreadSheetValues(problemNameText, spreadsheet)
+    
+    // Replace the pure data from spreadsheet to the actual HTML
+    for (let hint in problemData) {
+        // The only point where the problemData object changes 
+        problemData[hint] = await replaceSpreadsheetDataWithHTML(problemData, problemNameText, hint);
+    }
+
+    // Inject main button with complete data
+    attachMainExpandingButton(problemData, problemNameText, problemNameElem);
+
+    // Add button for expanding code in card if it exists
+    let expandCodeButton = document.querySelector('#expandCode');
+    if (expandCodeButton) expandCodeButton.addEventListener('click', changeWindow)
+}
+
+// Make initial request to spreadsheet
+async function requestToSpreadSheet() {
+    const response = await fetch("https://sheets.googleapis.com/v4/spreadsheets/1tnGJ2eI1SkpJJMcmYfnjsW-yeGcQaf251eJgiJLC6Qo/values/Sheet1?key=AIzaSyCjjXAOcyX1Q-RzzXwg3h5-sM_JaiBDk68");
+    const json = await response.json();
+    return json.values;
+}
+
+// Create a map - problemData that holds the hint type => spreadsheet data
+function fillMapWithSpreadSheetValues(problemNameText, spreadsheet) {
     let problemRow;
     // Match spreadsheet request data to problem title
     for (let row of spreadsheet) {
@@ -27,61 +53,12 @@ async function main() {
     problemData['Text Solution'] = problemRow[3];
     problemData['Video Solution'] = problemRow[4];
     problemData['Code Solution'] = problemRow[5];
-    
-    // Replace the pure data from spreadsheet to the actual HTML
-    for (let hint in problemData) {
-        problemData[hint] = await replaceSpreadsheetDataWithHTML(problemNameText, problemData, hint);
-    }
-
-    let titleBar = problemNameElem.parentElement;
-    let div = document.createElement("div");
-    div.innerHTML = `
-    <div class="badge badge-info mt-2" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        CodeBreakers Hints
-    </div>
-    
-    <div class="collapse" id="collapseExample">
-        <div class='mt-1'>
-            <div id="accordion">
-                ${problemData['Hint 1']}
-                ${problemData['Hint 2']}
-                ${problemData['Text Solution']}
-                ${problemData['Video Solution']}
-                ${problemData['Code Solution']}
-                <div class="card">
-                    <div class="card-header" id="headingSix" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                        <h5 class="hint">
-                            <div class='btn collapsed'>Feedback</div>
-                        </h5>
-                    </div>
-                    <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
-                        <div class="card-body">
-                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfJAcC7WSbjycRLkuYrEgn1HPHhysTCBTUR4GXAOV-6ZJMxeg/viewform?embedded=true&entry.1655678686=${problemNameText}" width="400" height="1000" frameborder="0" marginheight="0" marginwidth="0" style="min-height: 600px" >Loading…</iframe>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    `;
-    // pretty code
-    document.head.appendChild(document.createElement('script')).src = 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=desert';
-    titleBar.append(div);
-
-    let expandCodeButton = document.querySelector('#expandCode');
-    if (expandCodeButton) expandCodeButton.addEventListener('click', changeWindow)
-}
-
-async function requestToSpreadSheet() {
-    const response = await fetch("https://sheets.googleapis.com/v4/spreadsheets/1tnGJ2eI1SkpJJMcmYfnjsW-yeGcQaf251eJgiJLC6Qo/values/Sheet1?key=AIzaSyCjjXAOcyX1Q-RzzXwg3h5-sM_JaiBDk68");
-    const json = await response.json();
-    return json.values;
+    return problemData;
 }
 
 // Replaces the value of entry problemData entry to the actual HTML that will be injected.
 // Check problemData object structure for clarity.
-async function replaceSpreadsheetDataWithHTML(problemNameText, problemData, hint) {
+async function replaceSpreadsheetDataWithHTML(problemData, problemNameText, hint) {
     let htmlOfHintType;
 
     // Different hint types require different HTML
@@ -92,8 +69,14 @@ async function replaceSpreadsheetDataWithHTML(problemNameText, problemData, hint
         htmlOfHintType = await handleTextOrCode(problemNameText, problemData, hint);
     }
 
-    // removes spaces from problemData keys for attribute names in html
+    // Replace card title with Suggest it is a google form
+    if (htmlOfHintType.includes('viewform')) {
+        hint = 'Suggest a ' + hint.toLowerCase();
+    }
+
+    // Removes spaces from problemData keys for attribute names in html
     let hintNameForHTML = hint.replace(/ /g, '');    
+
     // Base HTML for a card body
     let cardBodyTemplate = `
     <div class="card">
@@ -119,7 +102,8 @@ function handleHintOrVideo(problemNameText, problemData, hint) {
         if (problemData[hint] != '') {
             htmlOfHintType = problemData[hint];
         } else {
-            htmlOfHintType = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdOaS2D3ew00d4POG3N88SeVWV8F8Q-JJ2G8maaV7pESFp5bw/viewform?embedded=true&entry.1655678686=${problemNameText}"width="400" height="1000" frameborder="0" marginheight="0" marginwidth="0" style="min-height: 600px" >Loading…</iframe>`;
+            htmlOfHintType = `<iframe 
+            src="https://docs.google.com/forms/d/e/1FAIpQLSdOaS2D3ew00d4POG3N88SeVWV8F8Q-JJ2G8maaV7pESFp5bw/viewform?embedded=true&entry.1655678686=${problemNameText}"width="400" height="1000" frameborder="0" marginheight="0" marginwidth="0" style="min-height: 600px" >Loading…</iframe>`;
         }
     } else if (hint.includes('Video')) {
         if (problemData[hint] != '') {
@@ -160,6 +144,57 @@ ${code.substring(code.indexOf("class Solution:")).trim()}
         }
     }
     return htmlOfHintType;
+}
+
+// Creates main button, puts together all the card data, and injects it to the page
+function attachMainExpandingButton(problemData, problemNameText, problemNameElem) { 
+    let titleBar = problemNameElem.parentElement;
+    let mainButton = document.createElement("div");
+    mainButton.innerHTML = `
+    <div class="badge badge-info mt-2" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        CodeBreakers Hints
+    </div>
+    
+    <div class="collapse" id="collapseExample">
+        <div class='mt-1'>
+            <div id="accordion">
+                ${problemData['Hint 1']}
+                ${problemData['Hint 2']}
+                ${problemData['Text Solution']}
+                ${problemData['Video Solution']}
+                ${problemData['Code Solution']}
+                ${generalGoogleForm(problemData, problemNameText)}
+            </div>
+        </div>
+    </div>
+    `;
+    // Pretty code
+    document.head.appendChild(document.createElement('script')).src = 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=desert';
+    titleBar.append(mainButton);
+}
+
+// Display the general google form if there is at least one valid hint from the spreadsheet
+function generalGoogleForm(problemData, problemNameText) {
+    // true if there is atleast one valid hint
+    let displayGeneralGoogleForm = Object.values(problemData).some( (cardHTML) => !cardHTML.includes('viewform') )
+    if (displayGeneralGoogleForm) {
+        return  `
+        <div class="card">
+        <div class="card-header" id="headingSix" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+            <h5 class="hint">
+                <div class='btn collapsed'>Feedback</div>
+            </h5>
+        </div>
+        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+            <div class="card-body">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfJAcC7WSbjycRLkuYrEgn1HPHhysTCBTUR4GXAOV-6ZJMxeg/viewform?embedded=true&entry.1655678686=${problemNameText}" width="400" height="1000" frameborder="0" marginheight="0" marginwidth="0" style="min-height: 600px" >Loading…</iframe>
+            </div>
+        </div>
+        </div>
+        ` 
+    } else {
+        return ''
+    }
 }
 
 // Listener for expand button in the code section
