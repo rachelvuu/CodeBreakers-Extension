@@ -16,17 +16,25 @@
                 "libs/jquery-3.4.1.js",
                 "libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js",
                 "libs/showdownjs-showdown-3c120ed/dist/showdown.min.js",
-                "contentScript.js"
+                "problemContentScript/contentScript.js"
             ],
             "css": [
                 "libs/bootstrap-4.4.1-dist/css/bootstrap.min.css",
-                "contentScript.css"
+                "problemContentScript/contentScript.css"
             ]
+        },
+        {
+            "matches": ["https://leetcode.com/problemset/*"],
+            "js": ["listContentScript/contentScript.js"],
+            "css": ["listContentScript/contentScript.css"]
         }
     ],
 
+    "web_accessible_resources": [
+        "images/cblogo.png"
+    ],
     "browser_action": {
-        "default_popup": "popup.html",
+        "default_popup": "popup/popup.html",
         "default_icon": {
             "16": "images/cblogo.png",
             "32": "images/cblogo.png",
