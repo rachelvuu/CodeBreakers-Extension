@@ -18,14 +18,18 @@ async function main() {
     let mutationObserver = new MutationObserver(function(mutations) {
         mutations.forEach((mutation) => {
             if (mutation.type == 'attributes') {
+                // if pagination is clicked or new table is rendered
                 if (mutation.target == document.querySelector('a[class="reactable-page-button reactable-current-page"]') ||
                     mutation.target == document.querySelector('span[id="frequency-tooltip"]')) {
+                    // if new table is rendered add to heading
                     if (mutation.target == document.querySelector('span[id="frequency-tooltip"]')) {
+                        // if heading doesnt have cb heading add it
                         if (!document.querySelector('th[id="codeBreakersHeading"]')) {
                             addToHeading();
                         }
                     }
-                    if (!document.querySelector('img[class="cbSolution"]')) {
+                    // if rows don't have img col add it
+                    if (!document.querySelector('td[id="codeBreakersCol"]')) {
                         addToColumns(cbSolutionMap);
                     }
                 }
@@ -62,15 +66,14 @@ function addToColumns(cbSolutionMap) {
     let cbLogo = chrome.extension.getURL("../images/cblogo.png");
     for (let problem of tableData.children) {
         let problemName = problem.children[2].firstChild.firstChild.firstChild.textContent;
+        let cbColumn = document.createElement('td');
+        cbColumn.setAttribute('id', 'codeBreakersCol');
         if (cbSolutionMap[problemName] && cbSolutionMap[problemName] == 'yes') {
-            let cbColumn = document.createElement('td');
             cbColumn.innerHTML = `<span><img class="cbSolution" src="${cbLogo}" height=20 width=20></span>`;
-            problem.insertBefore(cbColumn, problem.childNodes[3])
         } else {
-            let cbColumn = document.createElement('td');
             cbColumn.innerHTML = `<span></span>`;
-            problem.insertBefore(cbColumn, problem.childNodes[3])  
         }
+        problem.insertBefore(cbColumn, problem.childNodes[3])
 
     }
 }
