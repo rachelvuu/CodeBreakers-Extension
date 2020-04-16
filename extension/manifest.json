@@ -16,17 +16,17 @@
                 "libs/jquery-3.4.1.js",
                 "libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js",
                 "libs/showdownjs-showdown-3c120ed/dist/showdown.min.js",
-                "problemContentScript/contentScript.js"
+                "contentScripts/problemContentScript/contentScript.js"
             ],
             "css": [
                 "libs/bootstrap-4.4.1-dist/css/bootstrap.min.css",
-                "problemContentScript/contentScript.css"
+                "contentScripts/problemContentScript/contentScript.css"
             ]
         },
         {
             "matches": ["https://leetcode.com/problemset/*"],
-            "js": ["listContentScript/contentScript.js"],
-            "css": ["listContentScript/contentScript.css"]
+            "js": ["contentScripts/listContentScript/contentScript.js"],
+            "css": ["contentScripts/listContentScript/contentScript.css"]
         }
     ],
 
