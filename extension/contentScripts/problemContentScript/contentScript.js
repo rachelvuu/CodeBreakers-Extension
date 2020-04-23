@@ -3,7 +3,21 @@ const width  = window.innerWidth;
 let expandedWindow = false;
 
 // Content script loads faster than rest of content, so we must wait for the page to load first.
-setTimeout(main, 1000);
+let mutationObserver = new MutationObserver(function(mutations) {
+    let problemNameElem = document.querySelector('div[data-cy="question-title"]');
+        if (document.body.contains(problemNameElem)) {
+            mutationObserver.disconnect();
+            main();
+        }
+    });
+    mutationObserver.observe(document, {
+        attributes: false,
+        characterData: false,
+        childList: true,
+        subtree: true,
+        attributeOldValue: false,
+        characterDataOldValue: false
+    });
 
 // Main function
 async function main() {
@@ -24,9 +38,24 @@ async function main() {
     // Inject main button with complete data
     attachMainExpandingButton(problemData, problemNameText, problemNameElem);
 
-    // Add button for expanding code in card if it exists
-    let expandCodeButton = document.querySelector('#expandCode');
-    if (expandCodeButton) expandCodeButton.addEventListener('click', changeWindow)
+    // Reattach main button in the event that it disappears when moving to the discuss tab
+    let main2d = document.querySelector('div[class="main__2_tD"]');
+    let mutationObserver = new MutationObserver(function(mutations) {
+        let mainButton = document.querySelector('div[class="badge badge-info mt-2"]');
+        if (main2d.childElementCount == 1 && !main2d.contains(mainButton)) {
+            let problemNameElem = document.querySelector('div[data-cy="question-title"]');
+            attachMainExpandingButton(problemData, problemNameText, problemNameElem);
+        }
+    });
+    mutationObserver.observe(main2d, {
+        attributes: false,
+        characterData: true,
+        childList: false,
+        subtree: true,
+        attributeOldValue: false,
+        characterDataOldValue: false
+    });
+
 }
 
 // Make initial request to spreadsheet
@@ -171,6 +200,10 @@ function attachMainExpandingButton(problemData, problemNameText, problemNameElem
     // Pretty code
     document.head.appendChild(document.createElement('script')).src = 'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=desert';
     titleBar.append(mainButton);
+    
+    // Add button for expanding code in card if it exists
+    let expandCodeButton = document.querySelector('#expandCode');
+    if (expandCodeButton) expandCodeButton.addEventListener('click', changeWindow)
 }
 
 // Display the general google form if there is at least one valid hint from the spreadsheet
