@@ -2,22 +2,35 @@
 const width  = window.innerWidth;
 let expandedWindow = false;
 
+chrome.storage.local.get(['state'], function(result) {
+    if (result.state == 'on') {
+        findElementAndStartMain();
+    }
+});
+
+chrome.storage.onChanged.addListener(function() {
+    location.reload();
+  });
+
+
 // Content script loads faster than rest of content, so we must wait for the page to load first.
-let mutationObserver = new MutationObserver(function(mutations) {
-    let problemNameElem = document.querySelector('div[data-cy="question-title"]');
-        if (document.body.contains(problemNameElem)) {
-            mutationObserver.disconnect();
-            main();
-        }
-    });
-    mutationObserver.observe(document, {
-        attributes: false,
-        characterData: false,
-        childList: true,
-        subtree: true,
-        attributeOldValue: false,
-        characterDataOldValue: false
-    });
+function findElementAndStartMain() {
+    let mutationObserver = new MutationObserver(function(mutations) {
+        let problemNameElem = document.querySelector('div[data-cy="question-title"]');
+            if (document.body.contains(problemNameElem)) {
+                mutationObserver.disconnect();
+                main();
+            }
+        });
+        mutationObserver.observe(document, {
+            attributes: false,
+            characterData: false,
+            childList: true,
+            subtree: true,
+            attributeOldValue: false,
+            characterDataOldValue: false
+        });
+}
 
 // Main function
 async function main() {

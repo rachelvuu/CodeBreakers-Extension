@@ -2,7 +2,7 @@
     "name": "CodeBreakers LeetCode",
     "version": "1.0",
     "description": "Hints and Solutions for CodeBreakers students practicing LeetCode",
-    "permissions": ["https://leetcode.com/*", "activeTab"],
+    "permissions": ["https://leetcode.com/*", "activeTab", "storage"],
 
     "background": {
         "scripts": ["background.js"],
@@ -42,6 +42,8 @@
             "128": "images/cblogo.png"
         }
     },
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://code.jquery.com https://stackpath.bootstrapcdn.com; object-src 'self'",
+
 
     "icons": {
         "16": "images/cblogo.png",

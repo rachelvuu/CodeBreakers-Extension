@@ -1,22 +1,31 @@
+chrome.storage.local.get(['state'], function(result) {
+    if (result.state == 'on') {
+        findElementAndStartMain();
+    }
+});
+
+chrome.storage.onChanged.addListener(function() {
+    location.reload();
+});
+
 // Content script loads faster than rest of content, so we must wait for the page to load first.
-let mutationObserver = new MutationObserver(function(mutations) {
-    let table = document.querySelector('div[class="question-list-base"]');
-        if (document.body.contains(table)) {
-            mutationObserver.disconnect();
-            console.log('found it!')
-            main();
-        } else {
-            console.log('not found');
-        }
-    });
-    mutationObserver.observe(document, {
-        attributes: false,
-        characterData: false,
-        childList: true,
-        subtree: true,
-        attributeOldValue: false,
-        characterDataOldValue: false
-    });
+function findElementAndStartMain() {
+    let mutationObserver = new MutationObserver(function(mutations) {
+        let table = document.querySelector('div[class="question-list-base"]');
+            if (document.body.contains(table)) {
+                mutationObserver.disconnect();
+                main();
+            }
+        });
+        mutationObserver.observe(document, {
+            attributes: false,
+            characterData: false,
+            childList: true,
+            subtree: true,
+            attributeOldValue: false,
+            characterDataOldValue: false
+        });
+}
 
 async function main() {
 
