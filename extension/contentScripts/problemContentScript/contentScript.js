@@ -15,14 +15,14 @@ chrome.storage.onChanged.addListener(function() {
 
 // Content script loads faster than rest of content, so we must wait for the page to load first.
 function findElementAndStartMain() {
-    let mutationObserver = new MutationObserver(function(mutations) {
+    let mainMutationObserver = new MutationObserver(function(mutations) {
         let problemNameElem = document.querySelector('div[data-cy="question-title"]');
             if (document.body.contains(problemNameElem)) {
-                mutationObserver.disconnect();
+                mainMutationObserver.disconnect();
                 main();
             }
         });
-        mutationObserver.observe(document, {
+        mainMutationObserver.observe(document, {
             attributes: false,
             characterData: false,
             childList: true,
@@ -55,7 +55,7 @@ async function main() {
     let main2d = document.querySelector('div[class="main__2_tD"]');
     let mutationObserver = new MutationObserver(function(mutations) {
         let mainButton = document.querySelector('div[class="badge badge-info mt-2"]');
-        if (main2d.childElementCount == 1 && !main2d.contains(mainButton)) {
+        if (mainButton == null && mutations.length == 2) {
             let problemNameElem = document.querySelector('div[data-cy="question-title"]');
             attachMainExpandingButton(problemData, problemNameText, problemNameElem);
         }
