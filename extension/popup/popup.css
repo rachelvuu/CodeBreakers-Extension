@@ -1,8 +1,25 @@
-html body{
-    width: 150px;
-    border-color: white;
-    border-style: ridge;
+html {
+    width: 300px;
+    background: #606060;
 }
+
 .btn {
     font-size: 1em;
+}
+
+p {
+    text-align: center;
+    color: white;
+}
+
+.on {
+    color: #327df3;
+}
+
+.off {
+    color: #FF6666;
+}
+
+#mainElem {
+    background-color: #606060;
 }

@@ -11,7 +11,7 @@ chrome.storage.onChanged.addListener(function() {
 // Content script loads faster than rest of content, so we must wait for the page to load first.
 function findElementAndStartMain() {
     let mutationObserver = new MutationObserver(function(mutations) {
-        let table = document.querySelector('div[class="question-list-base"]');
+        let table = document.querySelector('tr[class=reactable-column-header]');
             if (document.body.contains(table)) {
                 mutationObserver.disconnect();
                 main();
